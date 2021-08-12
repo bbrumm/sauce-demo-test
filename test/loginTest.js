@@ -18,15 +18,6 @@ describe('Login Page for Standard User', () => {
     await browser.close();
   });
 
-  /*
-  it('should have the correct title async', async () => {
-    this.timeout(5000);
-    const loginPage = new LoginPage(page);
-    let actualTitle = await loginPage.getTitle();
-    expect(actualTitle).to.eql('Swag Labs');
-  });
-  */
-
   it('should have the correct title (with timeout)', function(done) {
     this.timeout(5000);
     (async () => {
