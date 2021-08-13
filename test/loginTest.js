@@ -58,10 +58,12 @@ describe('Login Page for Standard User', function() {
 
   it('Standard user login', async () => {
     const loginPage = new LoginPage(page);
-    const usernameField = loginPage.getUsernameField();
-    await page.type(usernameField, 'standard-user');
+    //const usernameField = loginPage.getUsernameField();
+    //console.log('username field:' + usernameField);
+    await page.type('input[id=user-name]', 'standard-user');
+    let usernameFieldValue = await page.$eval('input[id=user-name]', ele => ele.value);
 
-    expect(await loginPage.usernameField).to.eql(true);
+    expect(usernameFieldValue).to.eql('standard-user');
   });
 
 
