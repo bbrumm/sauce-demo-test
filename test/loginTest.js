@@ -127,7 +127,7 @@ describe('Login Page for Standard User', function() {
     let errorMessageTextColour = await page.$eval(loginPage.errorMessageTextSelector, ele => getComputedStyle(ele).getPropertyValue('color'));
     let errorMessageBackgroundColour = await page.$eval(loginPage.errorMessageBoxSelector, ele => getComputedStyle(ele).getPropertyValue('background-color'));
 
-    expect(errorMessage).to.eql('Epic sadface: Password is required');
+    expect(errorMessage).to.eql('Epic sadface: Username is required');
     expect(errorMessageTextColour).to.eql(expectedErrorMessageTextColour);
     expect(errorMessageBackgroundColour).to.eql(expectedErrorMessageBackgroundColour);
   });
