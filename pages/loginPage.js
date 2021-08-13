@@ -1,6 +1,10 @@
 //jshint esversion:8
 class LoginPage {
 
+  loginButtonSelector = 'input[id=login-button]';
+  errorMessageBoxSelector = '#login_button_container > div > form > div.error-message-container.error';
+  errorMessageTextSelector = '#login_button_container > div > form > div.error-message-container.error > h3';
+
     constructor(page) {
         this.page = page;
     }
@@ -23,10 +27,19 @@ class LoginPage {
       return await this.page.waitForSelector('input[id='+ elementID +']') !== null;
     }
 
-    async getUsernameField() {
-      return await this.page.waitForSelector('input[id=user-name]');
-      //return await this.checkIfElementExists('user-name');
+    getUsernameField() {
+      return 'input[id=user-name]';
     }
+
+    getPasswordField() {
+      return 'input[id=password]';
+    }
+
+    /*
+    getLoginButton() {
+      return 'input[id=login-button]';
+    }
+    */
 
     /*
     async searchFor(word) {

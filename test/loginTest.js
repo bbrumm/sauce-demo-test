@@ -4,6 +4,12 @@ const expect = require('chai').expect;
 const LoginPage = require('../pages/LoginPage');
 
 //Account details
+const standardUser = 'standard_user';
+const allUserPasswords = 'secret_sauce';
+
+//Error message
+const expectedErrorMessageTextColour = 'rgb(255, 255, 255)';
+const expectedErrorMessageBackgroundColour = 'rgb(226, 35, 26)';
 
 
 describe('Login Page for Standard User', function() {
@@ -51,26 +57,27 @@ describe('Login Page for Standard User', function() {
 
   /*
   Tests to write:
-  Enter username, no password, login, see error
+  Enter username, no password, login, see error (done)
   No username or password, login, see error
   No username, enter password, login, see error
   Username with wrong password, see error
-  Username and password correct, login, see next page
+  Username and password correct, login, see next page (done)
   */
 
   it('Username field entry', async () => {
     const loginPage = new LoginPage(page);
-    await page.type(loginPage.getUsernameField(), 'standard_user');
+    await page.type(loginPage.getUsernameField(), standardUser);
     let usernameFieldValue = await page.$eval(loginPage.getUsernameField(), ele => ele.value);
-    expect(usernameFieldValue).to.eql('standard_user');
+    expect(usernameFieldValue).to.eql(standardUser);
   });
 
   it('Standard user login', async () => {
     const loginPage = new LoginPage(page);
-    await page.type(loginPage.getUsernameField(), 'standard_user');
-    await page.type(loginPage.getPasswordField(), 'secret_sauce');
+    await page.type(loginPage.getUsernameField(), standardUser);
+    await page.type(loginPage.getPasswordField(), allUserPasswords);
+
     //Login
-    await page.click(loginPage.getLoginButton());
+    await page.click(loginPage.loginButtonSelector);
 
     //Wait for page to load
     let pageTitleSelector = '#header_container > div.header_secondary_container > span';
@@ -83,5 +90,46 @@ describe('Login Page for Standard User', function() {
     expect(pageTitle).to.eql('Products');
   });
 
+  it('Incorrect username with no password', async () => {
+    const loginPage = new LoginPage(page);
+    await page.type(loginPage.getUsernameField(), 'some-other-user');
+    //await page.type(loginPage.getPasswordField(), allUserPasswords);
+
+    //Login
+    await page.click(loginPage.loginButtonSelector);
+
+    //Wait for error message
+    await page.waitForSelector(loginPage.errorMessageBoxSelector);
+
+    //Get error message
+    let errorMessage = await page.$eval(loginPage.errorMessageTextSelector, ele => ele.textContent);
+    let errorMessageTextColour = await page.$eval(loginPage.errorMessageTextSelector, ele => getComputedStyle(ele).getPropertyValue('color'));
+    let errorMessageBackgroundColour = await page.$eval(loginPage.errorMessageBoxSelector, ele => getComputedStyle(ele).getPropertyValue('background-color'));
+
+    expect(errorMessage).to.eql('Epic sadface: Password is required');
+    expect(errorMessageTextColour).to.eql(expectedErrorMessageTextColour);
+    expect(errorMessageBackgroundColour).to.eql(expectedErrorMessageBackgroundColour);
+  });
+
+  it('Missing username and password', async () => {
+    const loginPage = new LoginPage(page);
+    await page.type(loginPage.getUsernameField(), '');
+    //await page.type(loginPage.getPasswordField(), allUserPasswords);
+
+    //Login
+    await page.click(loginPage.loginButtonSelector);
+
+    //Wait for error message
+    await page.waitForSelector(loginPage.errorMessageBoxSelector);
+
+    //Get error message
+    let errorMessage = await page.$eval(loginPage.errorMessageTextSelector, ele => ele.textContent);
+    let errorMessageTextColour = await page.$eval(loginPage.errorMessageTextSelector, ele => getComputedStyle(ele).getPropertyValue('color'));
+    let errorMessageBackgroundColour = await page.$eval(loginPage.errorMessageBoxSelector, ele => getComputedStyle(ele).getPropertyValue('background-color'));
+
+    expect(errorMessage).to.eql('Epic sadface: Password is required');
+    expect(errorMessageTextColour).to.eql(expectedErrorMessageTextColour);
+    expect(errorMessageBackgroundColour).to.eql(expectedErrorMessageBackgroundColour);
+  });
 
 });
