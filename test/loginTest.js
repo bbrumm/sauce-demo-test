@@ -60,7 +60,7 @@ describe('Login Page for Standard User', function() {
   Enter username, no password, login, see error (done)
   No username or password, login, see error (done)
   No username, enter password, login, see error (done)
-  Username with wrong password, see error
+  Username with wrong password, see error (done)
   Username and password correct, login, see next page (done)
   */
 
