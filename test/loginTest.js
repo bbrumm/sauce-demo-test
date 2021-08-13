@@ -58,8 +58,8 @@ describe('Login Page for Standard User', function() {
   /*
   Tests to write:
   Enter username, no password, login, see error (done)
-  No username or password, login, see error
-  No username, enter password, login, see error
+  No username or password, login, see error (done)
+  No username, enter password, login, see error (done)
   Username with wrong password, see error
   Username and password correct, login, see next page (done)
   */
@@ -151,6 +151,29 @@ describe('Login Page for Standard User', function() {
     let errorMessageBackgroundColour = await(loginPage.getErrorMessageBackgroundColor());
 
     expect(errorMessage).to.eql('Epic sadface: Username is required');
+    expect(errorMessageTextColour).to.eql(expectedErrorMessageTextColour);
+    expect(errorMessageBackgroundColour).to.eql(expectedErrorMessageBackgroundColour);
+  });
+
+  it('Incorrect password', async () => {
+    const loginPage = new LoginPage(page);
+    await page.type(loginPage.getUsernameField(), standardUser);
+    //Password is slightly different from the real one
+    await page.type(loginPage.getPasswordField(), 'secret-sauce');
+
+    //Login
+    await page.click(loginPage.loginButtonSelector);
+
+    //Wait for error message
+    await page.waitForSelector(loginPage.errorMessageBoxSelector);
+
+    //Get error message
+    //let errorMessage = await page.$eval(loginPage.errorMessageTextSelector, ele => ele.textContent);
+    let errorMessage = await(loginPage.getErrorMessageText());
+    let errorMessageTextColour = await(loginPage.getErrorMessageTextColor());
+    let errorMessageBackgroundColour = await(loginPage.getErrorMessageBackgroundColor());
+
+    expect(errorMessage).to.eql('Epic sadface: Username and password do not match any user in this service');
     expect(errorMessageTextColour).to.eql(expectedErrorMessageTextColour);
     expect(errorMessageBackgroundColour).to.eql(expectedErrorMessageBackgroundColour);
   });
