@@ -23,6 +23,11 @@ class LoginPage {
       return await this.page.waitForSelector('input[id='+ elementID +']') !== null;
     }
 
+    async getUsernameField() {
+      return await this.page.waitForSelector('input[id=user-name]');
+      //return await this.checkIfElementExists('user-name');
+    }
+
     /*
     async searchFor(word) {
         await this.page.type('input[id=search_form_input_homepage]', word);

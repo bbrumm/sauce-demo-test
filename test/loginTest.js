@@ -4,9 +4,10 @@ const expect = require('chai').expect;
 const LoginPage = require('../pages/LoginPage');
 
 
-describe('Login Page for Standard User', () => {
+describe('Login Page for Standard User', function() {
   let browser;
   let page;
+  this.timeout(5000); //Timeout set as sometimes it takes a while for the URL to load
 
   beforeEach(async () => {
     browser = await puppeteer.launch();
@@ -18,8 +19,7 @@ describe('Login Page for Standard User', () => {
     await browser.close();
   });
 
-  it('should have the correct title (with timeout)', function(done) {
-    this.timeout(5000);
+  it('Page should have the correct title', function(done) {
     (async () => {
       const loginPage = new LoginPage(page);
       let actualTitle = await loginPage.getTitle();
@@ -27,8 +27,7 @@ describe('Login Page for Standard User', () => {
     })().then(done);
   });
 
-  it('incorrect title test', function(done) {
-    this.timeout(5000);
+  it('Page with incorrect title', function(done) {
     (async () => {
       const loginPage = new LoginPage(page);
       let actualTitle = await loginPage.getTitle();
@@ -37,14 +36,33 @@ describe('Login Page for Standard User', () => {
   });
   
 
-  it('username field exists', async () => {
+  it('Username field exists', async () => {
     const loginPage = new LoginPage(page);
     expect(await loginPage.usernameFieldExists()).to.eql(true);
   });
 
-  it('password field exists', async () => {
+  it('Password field exists', async () => {
     const loginPage = new LoginPage(page);
     expect(await loginPage.passwordFieldExists()).to.eql(true);
   });
+
+
+  /*
+  Tests to write:
+  Enter username, no password, login, see error
+  No username or password, login, see error
+  No username, enter password, login, see error
+  Username with wrong password, see error
+  Username and password correct, login, see next page
+  */
+
+  it('Standard user login', async () => {
+    const loginPage = new LoginPage(page);
+    const usernameField = loginPage.getUsernameField();
+    await page.type(usernameField, 'standard-user');
+
+    expect(await loginPage.usernameField).to.eql(true);
+  });
+
 
 });
