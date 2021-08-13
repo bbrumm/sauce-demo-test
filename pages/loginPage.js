@@ -35,11 +35,19 @@ class LoginPage {
       return 'input[id=password]';
     }
 
-    /*
-    getLoginButton() {
-      return 'input[id=login-button]';
+    async getErrorMessageText() {
+      return await this.page.$eval(this.errorMessageTextSelector, ele => ele.textContent);
     }
-    */
+
+    async getErrorMessageTextColor() {
+      return await this.page.$eval(this.errorMessageTextSelector, ele => getComputedStyle(ele).getPropertyValue('color'));
+    }
+
+    async getErrorMessageBackgroundColor() {
+      return await this.page.$eval(this.errorMessageBoxSelector, ele => getComputedStyle(ele).getPropertyValue('background-color'));
+    }
+
+    
 
     /*
     async searchFor(word) {

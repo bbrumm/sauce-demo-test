@@ -102,9 +102,9 @@ describe('Login Page for Standard User', function() {
     await page.waitForSelector(loginPage.errorMessageBoxSelector);
 
     //Get error message
-    let errorMessage = await page.$eval(loginPage.errorMessageTextSelector, ele => ele.textContent);
-    let errorMessageTextColour = await page.$eval(loginPage.errorMessageTextSelector, ele => getComputedStyle(ele).getPropertyValue('color'));
-    let errorMessageBackgroundColour = await page.$eval(loginPage.errorMessageBoxSelector, ele => getComputedStyle(ele).getPropertyValue('background-color'));
+    let errorMessage = await(loginPage.getErrorMessageText());
+    let errorMessageTextColour = await(loginPage.getErrorMessageTextColor());
+    let errorMessageBackgroundColour = await(loginPage.getErrorMessageBackgroundColor());
 
     expect(errorMessage).to.eql('Epic sadface: Password is required');
     expect(errorMessageTextColour).to.eql(expectedErrorMessageTextColour);
@@ -123,9 +123,10 @@ describe('Login Page for Standard User', function() {
     await page.waitForSelector(loginPage.errorMessageBoxSelector);
 
     //Get error message
-    let errorMessage = await page.$eval(loginPage.errorMessageTextSelector, ele => ele.textContent);
-    let errorMessageTextColour = await page.$eval(loginPage.errorMessageTextSelector, ele => getComputedStyle(ele).getPropertyValue('color'));
-    let errorMessageBackgroundColour = await page.$eval(loginPage.errorMessageBoxSelector, ele => getComputedStyle(ele).getPropertyValue('background-color'));
+    //let errorMessage = await page.$eval(loginPage.errorMessageTextSelector, ele => ele.textContent);
+    let errorMessage = await(loginPage.getErrorMessageText());
+    let errorMessageTextColour = await(loginPage.getErrorMessageTextColor());
+    let errorMessageBackgroundColour = await(loginPage.getErrorMessageBackgroundColor());
 
     expect(errorMessage).to.eql('Epic sadface: Username is required');
     expect(errorMessageTextColour).to.eql(expectedErrorMessageTextColour);
