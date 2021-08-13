@@ -133,4 +133,26 @@ describe('Login Page for Standard User', function() {
     expect(errorMessageBackgroundColour).to.eql(expectedErrorMessageBackgroundColour);
   });
 
+  it('Missing username', async () => {
+    const loginPage = new LoginPage(page);
+    await page.type(loginPage.getUsernameField(), '');
+    await page.type(loginPage.getPasswordField(), allUserPasswords);
+
+    //Login
+    await page.click(loginPage.loginButtonSelector);
+
+    //Wait for error message
+    await page.waitForSelector(loginPage.errorMessageBoxSelector);
+
+    //Get error message
+    //let errorMessage = await page.$eval(loginPage.errorMessageTextSelector, ele => ele.textContent);
+    let errorMessage = await(loginPage.getErrorMessageText());
+    let errorMessageTextColour = await(loginPage.getErrorMessageTextColor());
+    let errorMessageBackgroundColour = await(loginPage.getErrorMessageBackgroundColor());
+
+    expect(errorMessage).to.eql('Epic sadface: Username is required');
+    expect(errorMessageTextColour).to.eql(expectedErrorMessageTextColour);
+    expect(errorMessageBackgroundColour).to.eql(expectedErrorMessageBackgroundColour);
+  });
+
 });
