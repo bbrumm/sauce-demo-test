@@ -3,6 +3,8 @@ const puppeteer = require('puppeteer');
 const expect = require('chai').expect;
 const LoginPage = require('../pages/LoginPage');
 
+//Account details
+
 
 describe('Login Page for Standard User', function() {
   let browser;
@@ -56,14 +58,29 @@ describe('Login Page for Standard User', function() {
   Username and password correct, login, see next page
   */
 
+  it('Username field entry', async () => {
+    const loginPage = new LoginPage(page);
+    await page.type(loginPage.getUsernameField(), 'standard_user');
+    let usernameFieldValue = await page.$eval(loginPage.getUsernameField(), ele => ele.value);
+    expect(usernameFieldValue).to.eql('standard_user');
+  });
+
   it('Standard user login', async () => {
     const loginPage = new LoginPage(page);
-    //const usernameField = loginPage.getUsernameField();
-    //console.log('username field:' + usernameField);
-    await page.type('input[id=user-name]', 'standard-user');
-    let usernameFieldValue = await page.$eval('input[id=user-name]', ele => ele.value);
+    await page.type(loginPage.getUsernameField(), 'standard_user');
+    await page.type(loginPage.getPasswordField(), 'secret_sauce');
+    //Login
+    await page.click(loginPage.getLoginButton());
 
-    expect(usernameFieldValue).to.eql('standard-user');
+    //Wait for page to load
+    let pageTitleSelector = '#header_container > div.header_secondary_container > span';
+    await page.waitForSelector(pageTitleSelector);
+
+    //Get page title
+    let pageTitle = await page.$eval(pageTitleSelector, ele => ele.textContent);
+
+    //let usernameFieldValue = await page.$eval(loginPage.getUsernameField(), ele => ele.value);
+    expect(pageTitle).to.eql('Products');
   });
 
 
